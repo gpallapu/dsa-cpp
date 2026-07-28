@@ -11,3 +11,4 @@ This folder contains solutions to array-based interview problems.
 - Two Pointers
 - Hashing
 - Sorting
+- Searching
