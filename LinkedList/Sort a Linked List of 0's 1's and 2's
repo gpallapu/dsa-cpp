@@ -1,0 +1,106 @@
+Problem :
+Given the head of a singly linked list consisting of only 0, 1 or 2.
+Sort the given linked list and return the head of the modified list.
+Do it in-place by changing the links between the nodes without creating new nodes.
+
+Approach :
+split the LL into 3 partitions and them merge based on the order mentioned 
+
+Complexity Analysis: 
+Time Complexity
+O(n) where n is the number of nodes in the linked list, as the function traverses the list exactly once during the initialization and partitioning loop.
+Space Complexity
+O(1) because the algorithm only uses a fixed number of pointers to manage the sub-lists regardless of the input size.
+
+/*
+Definition of singly linked list:
+class ListNode{
+  public:
+    int data;
+    ListNode *next;
+    ListNode() : data(0), next(nullptr) {}
+    ListNode(int x) : data(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : data(x), next(next) {}
+};
+*/
+
+class Solution {
+    public:
+        ListNode* sortList(ListNode* &head) {
+            //your code goes here
+            if(head == nullptr || head->next == nullptr)    
+                return head ;
+            ListNode* zeroH = nullptr ;
+            ListNode* zeroT = nullptr ;
+            ListNode* oneH = nullptr ;
+            ListNode* oneT = nullptr ;
+            ListNode* twoH = nullptr ;
+            ListNode* twoT = nullptr ;
+            ListNode* curr = head ;
+            while(curr != nullptr)
+            {
+                ListNode* nextNode = curr->next ;
+                curr->next = nullptr ;
+                if(curr->data == 0)
+                {
+                    if(zeroH == nullptr)
+                    {
+                        zeroH = curr;
+                        zeroT = zeroH ;
+                    }
+                    else
+                    {
+                        zeroT->next = curr ;
+                        zeroT = curr ;
+                    }
+                }
+                else if (curr->data == 1)
+                {
+                    if(oneH == nullptr)
+                    {
+                        oneH = curr;
+                        oneT = oneH ;
+                    }
+                    else
+                    {
+                        oneT->next = curr ;
+                        oneT = curr ;
+                    }
+                }
+                else
+                {
+                    if(twoH == nullptr)
+                    {
+                        twoH = curr;
+                        twoT = twoH ;
+                    }
+                    else
+                    {
+                        twoT->next = curr ;
+                        twoT = curr ;
+                    }
+                }
+                curr = nextNode ;
+
+            }
+            ListNode* ans = nullptr ;
+            if(zeroT != nullptr)
+            {
+                if(oneH == nullptr)
+                    zeroT->next = twoH ;
+                else
+                    zeroT->next = oneH ;
+            }
+            if(oneT != nullptr)
+            {
+                oneT->next = twoH ;
+            }
+            if(zeroH)
+                ans = zeroH ;
+            else if(oneH)
+                ans = oneH ;
+            else
+                ans = twoH ;
+            return ans ;
+        }
+};
