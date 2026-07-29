@@ -1,0 +1,171 @@
+# Intersection of Two Linked Lists
+
+## Problem Statement
+
+Given the heads of two singly linked lists `headA` and `headB`, return the node at which the two linked lists intersect.
+
+If the two linked lists have no intersection, return `nullptr`.
+
+**Constraints**
+- Do not modify the linked lists.
+- The solution should use **O(1)** extra space.
+
+---
+
+## Approach (Two Pointer Technique)
+
+### Intuition
+
+The two linked lists may have different lengths.
+
+If one pointer starts from `headA` and the other from `headB`, they will not reach the intersection node at the same time.
+
+To compensate for the difference in lengths:
+
+- Traverse both lists simultaneously.
+- When a pointer reaches the end of its list, redirect it to the head of the other list.
+- Eventually both pointers will traverse exactly the same total distance.
+
+If an intersection exists, both pointers will meet at the intersection node.
+
+If no intersection exists, both pointers will become `nullptr` after traversing both lists.
+
+---
+
+## Algorithm
+
+1. Initialize two pointers:
+   - `p1 = headA`
+   - `p2 = headB`
+
+2. Traverse both lists until both pointers become equal.
+
+3. If a pointer reaches the end of a list:
+   - Redirect it to the head of the opposite list.
+
+4. Otherwise, move the pointer to the next node.
+
+5. When `p1 == p2`, return either pointer.
+
+---
+
+## Dry Run
+
+### Example
+
+```
+List A
+
+4 → 1
+      \
+       8 → 4 → 5
+      /
+5 → 6 → 1
+
+List B
+```
+
+Traversal:
+
+```
+p1:
+A → NULL → B
+
+p2:
+B → NULL → A
+```
+
+After both pointers traverse the combined length of the two lists, they meet at node **8**.
+
+---
+
+## C++ Solution
+
+```cpp
+/*
+Definition of singly linked list:
+struct ListNode
+{
+    int val;
+    ListNode *next;
+
+    ListNode()
+    {
+        val = 0;
+        next = NULL;
+    }
+
+    ListNode(int data1)
+    {
+        val = data1;
+        next = NULL;
+    }
+
+    ListNode(int data1, ListNode *next1)
+    {
+        val = data1;
+        next = next1;
+    }
+};
+*/
+
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+
+        ListNode* p1 = headA;
+        ListNode* p2 = headB;
+
+        while (p1 != p2)
+        {
+            if (p1 == nullptr)
+                p1 = headB;
+            else
+                p1 = p1->next;
+
+            if (p2 == nullptr)
+                p2 = headA;
+            else
+                p2 = p2->next;
+        }
+
+        return p1;
+    }
+};
+```
+
+---
+
+## Complexity Analysis
+
+### Time Complexity
+
+```
+O(m + n)
+```
+
+where
+
+- `m` = length of List A
+- `n` = length of List B
+
+Each pointer traverses both linked lists at most once.
+
+---
+
+### Space Complexity
+
+```
+O(1)
+```
+
+Only two pointers are used.
+
+---
+
+## Key Learning
+
+- Do not compare node values; compare node addresses.
+- The stopping condition is `p1 == p2`, not `nullptr`.
+- Redirect each pointer to the opposite list after reaching the end.
+- Both pointers travel the same total distance (`LengthA + LengthB`), guaranteeing they meet at the intersection or both reach `nullptr`.
