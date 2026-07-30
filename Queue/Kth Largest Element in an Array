@@ -1,0 +1,130 @@
+# 215. Kth Largest Element in an Array
+
+## Problem Statement
+
+Given an integer array `nums` and an integer `k`, return the **kth largest element** in the array.
+
+> Note:
+> - It is the kth largest element in the sorted order.
+> - It is **not** the kth distinct element.
+
+### Example
+
+```text
+Input:
+nums = [3,2,1,5,6,4]
+k = 2
+
+Output:
+5
+```
+
+---
+
+# Approach (Min Heap)
+
+Instead of sorting the entire array, we maintain a **Min Heap of size `k`**.
+
+### Key Observation
+
+- The heap always stores the **largest `k` elements** encountered so far.
+- The smallest element among these `k` elements is present at the **top** of the Min Heap.
+- Therefore, after processing all elements, the heap's top is the **kth largest element**.
+
+---
+
+## Algorithm
+
+1. Create a **Min Heap**.
+2. Traverse every element in the array.
+3. If heap size is less than `k`, insert the current element.
+4. Otherwise:
+   - Compare the current element with the heap top.
+   - If current element is greater:
+     - Remove the heap top.
+     - Insert the current element.
+   - Else ignore it.
+5. Return the heap top.
+
+---
+
+
+## C++ Solution
+
+```cpp
+class Solution {
+public:
+    int kthLargestElement(vector<int>& nums, int k) {
+
+        priority_queue<int, vector<int>, greater<int>> pq;
+
+        for (int num : nums) {
+
+            if (pq.size() < k) {
+                pq.push(num);
+            }
+            else if (num > pq.top()) {
+                pq.pop();
+                pq.push(num);
+            }
+        }
+
+        return pq.top();
+    }
+};
+```
+
+---
+
+# Complexity Analysis
+
+### Time Complexity
+
+- Each element is processed once.
+- Heap insertion/deletion takes **O(log K)**.
+
+Overall:
+
+```text
+O(N log K)
+```
+
+where:
+
+- `N` = Number of elements
+- `K` = Required kth largest element
+
+---
+
+### Space Complexity
+
+The heap stores at most `k` elements.
+
+```text
+O(K)
+```
+
+---
+
+# Why Min Heap?
+
+A **Min Heap** of size `k` efficiently maintains only the **largest `k` elements**.
+
+- If the current element is smaller than the heap top, it cannot be part of the largest `k` elements.
+- If it is larger, it replaces the smallest among the current top `k` elements.
+
+This avoids sorting the complete array and improves the complexity from:
+
+```text
+Sorting:
+O(N log N)
+```
+
+to
+
+```text
+Min Heap:
+O(N log K)
+```
+
+which is significantly better when `K << N`.
